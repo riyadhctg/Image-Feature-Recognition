@@ -59,27 +59,6 @@ BYTE buf[320*240*CHANNEL];
 //variables for object recognition
 const NUI_IMAGE_FRAME * pImageFrame = NULL;
 
-/*
-IplImage* img1 = cvLoadImage("detectMeGSA.jpg");
-cv::Mat objectMat1(img1);
-
-
-IplImage* img2 = cvLoadImage("detectNoteBook.jpg");
-cv::Mat objectMat2(img2);
-
-IplImage* img3 = cvLoadImage("detectCupe.jpg");
-cv::Mat objectMat3(img3);
-
-IplImage* img4 = cvLoadImage("detectMag.jpg");
-cv::Mat objectMat4(img4);
-
-IplImage* img;
-cv::Mat objectMat(img);
-
-IplImage* scn;
-cv::Mat sceneMat(scn);
-
-*/
 Mat objectMat1= imread( "detectMeGSA.jpg", CV_LOAD_IMAGE_GRAYSCALE );
 Mat objectMat2= imread( "detectNoteBook.jpg", CV_LOAD_IMAGE_GRAYSCALE );
 Mat objectMat3= imread( "detectCupe.jpg", CV_LOAD_IMAGE_GRAYSCALE );
@@ -318,66 +297,6 @@ int createRGBImage(HANDLE h, IplImage* colour)
 			
 
 
-			//-----trial to replace pixels -- failed		
-			//Mat warpDest(Size(objectMat1.cols*2, objectMat1.rows*2),CV_8UC1);;
-			//for(int y=0;y<objectMat1.rows;y++)
-			//for(int x=0;x<objectMat1.cols;x++)
-			//{
-			//	warpDest.at<uchar>(y,x) = objectMat1.at<uchar>(y,x) + objectMat2.at<uchar>(y,x);
-			//}				
-			//imshow ("warp", warpDest);
-			//-----trial to replace pixels -- failed
-
-
-			//-------this print every pixel of object
-			//for(int i=0; i<objectMat1.rows; i++) 
-			//for(int j=0; j<objectMat1.cols; j++) 
-			//std::cout << (int)objectMat1.at<uchar>(j,i) << std::endl;
-			//-------this print every pixel of object  
-
-
-
-			/*/----- draws a recntangle around detected object
-			scene_corners[0] = scene_corners[0]+ Point2f( objectMat.cols, 0), scene_corners[1]+ Point2f( objectMat.cols, 0);
-			scene_corners[1] = scene_corners[1]+ Point2f( objectMat.cols, 0), scene_corners[2]+ Point2f( objectMat.cols, 0);
-			scene_corners[2] = scene_corners[2]+ Point2f( objectMat.cols, 0), scene_corners[3]+ Point2f( objectMat.cols, 0);
-			scene_corners[3] = scene_corners[3]+ Point2f( objectMat.cols, 0), scene_corners[0]+ Point2f( objectMat.cols, 0);
-			rectangle(img_matches, scene_corners[1], scene_corners[3], CV_RGB(0,0,255),-5,8);
-			//--------------draws a recntangle around detected object */
-
-
-
-
-			/*/-------------- replaces all pixel to certain color in img_matches [work on one channel]
-			for(int i=0; i<objectMat1.cols; i++){
-			for(int j=0; j<objectMat1.rows; j++){
-
-			objectMat1.data[objectMat1.step[0]*i + objectMat1.step[1]*j + 0] = 0;
-			}
-			} 
-			imshow ("fmsdfds", objectMat1);
-			//-------------------replaces all pixel to certain color in img_matches [work on one channel] */
-
-			//std::vector< Point2f > scene_corners(4);
-
-
-
-			/*/---- many lines
-
-			for (int i=0; i<5; i++){
-			for (int x=0; x<30; x+=10){
-			for (int y=0; y<30; y+=10){
-			scene_corners[i] = cvPoint(0,0); 
-			line( img_matches, scene_corners[i] + Point2f( objectMat.cols, 0) , scene_corners[i+1] + Point2f( objectMat.cols, 0), Scalar(0, 255, 255), 100 );
-			}		
-			}
-			}
-
-			/--- many lines/*/
-
-
-
-
 
 			//-- Draw lines between the corners (the mapped object in the scene - image_2 )
 			line( img_matches, scene_corners[0] + Point2f( objectMat.cols, 0), scene_corners[1] + Point2f( objectMat.cols, 0), Scalar(0, 255, 0), 4 );
@@ -385,30 +304,7 @@ int createRGBImage(HANDLE h, IplImage* colour)
 			line( img_matches, scene_corners[2] + Point2f( objectMat.cols, 0), scene_corners[3] + Point2f( objectMat.cols, 0), Scalar( 0, 255, 0), 4 );
 			line( img_matches, scene_corners[3] + Point2f( objectMat.cols, 0), scene_corners[0] + Point2f( objectMat.cols, 0), Scalar( 0, 255, 0), 4 );
 
-			/*/-----iterator
-			for (Mat3b::iterator it = img_matches.begin(); it != img_matches.end(); it++) {
-			if (*it == Vec3b(0, 255, 0)) {
-			*it = Vec3b(0, 0, 0);
-			}
-			}
-			//-----iterator-------/*/
-
-
 			
-			/*/-------------- replaces all pixel to certain color in img_matches [work on one channel]
-			for(int i=0; i<objectMat1.cols; i++){
-			for(int j=0; j<objectMat1.rows; j++){
-				//img_matches.at<Vec3b>(i, j)=0;
-			objectMat1.data[objectMat1.step[0]*i + objectMat1.step[1]*j ] = objectMat2.data[objectMat2.step[0]*i + objectMat2.step[1]*j];
-			}
-			} 
-			imshow ("fmsdfds", objectMat1);
-			//-------------------replaces all pixel to certain color in img_matches [work on one channel] */
-
-
-
-
-
 
 			imshow( "Good Matches & Object detection", img_matches );
 
@@ -487,41 +383,7 @@ int createRGBImage(HANDLE h, IplImage* colour)
 //main
 int main(int argc,char * argv[])
 {
-	//-------------@@@@@--------function to control Kinect Motor Angle
-	/*
-	NuiInitialize(NUI_INITIALIZE_FLAG_USES_COLOR);
-	NuiCameraElevationSetAngle(15);
-
-	int KB_code=0;
-	int kinectAngle = 15;
-
-	cout << "Press Up/Down arrows to adjust Kinect Camera Angle" << endl;
-	cout << "Or Press Escape to contniue" << endl;
-
-	while(KB_code != KB_ESCAPE )
-	{
-	if (kbhit())
-	{
-	KB_code = getch();
-	//printf("KB_code = %i \n",KB_code);
-
-	switch (KB_code)
-	{
-	case KB_UP:
-	kinectAngle += 4;
-	NuiCameraElevationSetAngle(kinectAngle);
-	break;
-
-	case KB_DOWN:
-	kinectAngle -= 4;
-	NuiCameraElevationSetAngle(kinectAngle);
-	break;
-	}
-	}
-	}
-	*/
-
-
+	
 
 	ob1ptr[0]="\0";
 	ob2ptr[0]="\0";
